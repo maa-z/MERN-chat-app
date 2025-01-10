@@ -3,6 +3,7 @@ import express from "express"
 
 // cors 
 import cors from "cors"
+import path from "path";
 
 import dotenv from "dotenv"
 dotenv.config();
@@ -25,6 +26,8 @@ import {app,server} from "./lib/socket.js";
 import cookieParser from "cookie-parser"
 app.use(cookieParser());
 
+const __dirname = path.resolve();
+
 app.use(cors({
     origin : "http://localhost:5173",
     credentials : true
@@ -46,6 +49,14 @@ app.use("/api/auth",authRoutes);
 app.use("/api/messages",messageRoutes);
 
 const PORT = process.env.PORT
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+    });
+  }
 
 server.listen(PORT,()=>{
     console.log("server is running is on "+PORT);
@@ -96,3 +107,27 @@ server.listen(PORT,()=>{
 //     "build": "npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend",
 //     "start": "npm run start --prefix backend"
 //   },
+
+// now delete nodemodeule from front end and backend 
+// then from the root directory terminal write
+// npm run build
+// this script will rebuild node_module package folder for both frontend and backend , 
+// addition to that in the front end you wil get a foder dist that is optimize mini version of your entire  react application
+
+// it is for backend to access front end which is now dist index.html
+
+// then in the index.js form backend 
+// import path from "path";
+// const __dirname = path.resolve();
+
+// if (process.env.NODE_ENV === "production") {
+//     app.use(express.static(path.join(__dirname, "../frontend/dist")));
+  
+//     app.get("*", (req, res) => {
+//       res.sendFile(path.join(__dirname, "../frontend", "dist", "index.html"));
+//     });
+//   }
+
+
+// then in the axios js file change this 
+// baseURL: import.meta.env.MODE === "development" ? "http://localhost:5001/api" : "/api",
