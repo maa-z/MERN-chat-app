@@ -39,10 +39,10 @@ app.use(cors({
 
 app.use(express.json());
 
-app.get("/",(req,res)=>{
-    console.log("hello");
-    res.send("hello");
-})
+// app.get("/",(req,res)=>{
+//     console.log("hello");
+//     res.send("hello");
+// })
 
 app.use("/api/auth",authRoutes);
 
@@ -131,3 +131,11 @@ server.listen(PORT,()=>{
 
 // then in the axios js file change this 
 // baseURL: import.meta.env.MODE === "development" ? "http://localhost:5001/api" : "/api",
+
+
+// upload give hub 
+// host from render com 
+// in build use npm run build 
+// in start use npm run start
+// add .env data except develpment 
+// you may change secret key 
